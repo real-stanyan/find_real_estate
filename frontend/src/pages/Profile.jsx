@@ -23,6 +23,8 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 
+import { Link } from "react-router-dom";
+
 const Profile = () => {
   const fileRef = useRef(null);
   const dispatch = useDispatch();
@@ -187,6 +189,12 @@ const Profile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+        >
+          Create Listing
+        </Link>
       </form>
       {/* account actions */}
       <div className="flex justify-between mt-5">
