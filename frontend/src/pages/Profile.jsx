@@ -9,6 +9,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from "../redux/user/userSlice";
 
 // import from firebase
@@ -94,7 +97,7 @@ const Profile = () => {
 
   const handleDeleteUser = async () => {
     try {
-      dispatch(updateUserStart());
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
@@ -105,6 +108,21 @@ const Profile = () => {
       dispatch(deleteUserSuccess(data));
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
     }
   };
 
@@ -178,7 +196,9 @@ const Profile = () => {
         >
           Delete Account
         </span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+          Sign Out
+        </span>
       </div>
       {/* error message if any */}
       <p className="text-red-700 mt-5">{error ? error : ""}</p>
