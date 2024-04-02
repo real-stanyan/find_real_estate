@@ -35,7 +35,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  console.log(formData);
+  const [showListingError, setShowListingError] = useState(false);
+  const [userListing, setUserListing] = useState([]);
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -128,6 +129,21 @@ const Profile = () => {
     }
   };
 
+  const handleShowListings = async () => {
+    try {
+      const res = await fetch(`/api/user/listing/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingError(true);
+        return;
+      }
+      setUserListing(data);
+      console.log(userListing);
+    } catch (error) {
+      setShowListingError(true);
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -213,6 +229,41 @@ const Profile = () => {
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
+      <button
+        type="button"
+        onClick={handleShowListings}
+        className="text-green-700"
+      >
+        Show Listing
+      </button>
+      {showListingError ? (
+        <p className="text-red-700">show listing error</p>
+      ) : (
+        ""
+      )}
+      {userListing &&
+        userListing.length > 0 &&
+        userListing.map((listing) => (
+          <div
+            key={listing._id}
+            className="border rounded-lg p-3 flex justify-between items-center"
+          >
+            <Link to={`/listing/${listing._id}`}>
+              <img
+                src={listing.imageUrls[0]}
+                alt=""
+                className="h-16 w-16 object-contain"
+              />
+            </Link>
+            <Link to={`/listing/${listing._id}`}>
+              <p className="text-slate-700">{listing.name}</p>
+            </Link>
+            <div className="flex flex-col item-center">
+              <button className="text-red-700 uppercase">delete</button>
+              <button className="text-green-700 uppercase">edit</button>
+            </div>
+          </div>
+        ))}
     </div>
   );
 };
