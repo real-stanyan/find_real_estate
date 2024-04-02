@@ -284,7 +284,7 @@ const CreateListing = () => {
               <input
                 type="number"
                 id="regularPrice"
-                min="100000"
+                min="1"
                 max="999999999"
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -297,7 +297,7 @@ const CreateListing = () => {
               <input
                 type="number"
                 id="discountPrice"
-                min="100000"
+                min="1"
                 max="999999999"
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
